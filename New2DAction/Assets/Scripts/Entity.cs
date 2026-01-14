@@ -1,12 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
     public Rigidbody2D rb { get; private set; }
-
     private CapsuleCollider2D capsuleCollider;
-
-    protected StateMachine stateMachine;
+    public StateMachine stateMachine;
     public Animator anim { get; private set; }
 
     private bool facingRight = true;
@@ -24,6 +23,8 @@ public class Entity : MonoBehaviour
     [SerializeField] private float WallChecker;
     [SerializeField] private Transform GroundCheckComponent;
 
+    private Coroutine KnockbackCo;
+    public bool isKnockback; 
 
     protected virtual void Awake()
     {
@@ -41,6 +42,26 @@ public class Entity : MonoBehaviour
 
     }
 
+    public void RecieveKnockback(Vector2 knockback, float duration)
+    {
+        if (KnockbackCo != null)
+            StopCoroutine(KnockbackCo);
+
+        KnockbackCo = StartCoroutine(KnockbackCoroutine(knockback,duration));
+    }
+
+    private IEnumerator KnockbackCoroutine(Vector2 knockback, float duration)
+    {
+        isKnockback = true;
+        rb.linearVelocity = knockback;
+        Debug.Log("Knockback applied: " + knockback);
+
+        yield return new WaitForSeconds(duration);
+
+        rb.linearVelocity = Vector2.zero;
+        isKnockback = false;
+    }
+
     protected virtual void Update()
     {
         stateMachine.UpdateActiveState();
@@ -51,6 +72,9 @@ public class Entity : MonoBehaviour
 
     public void SetVelocity(float velocityX, float velocityY)
     {
+        if (isKnockback)
+            return;
+
         rb.linearVelocity = new Vector2(velocityX, velocityY);
         CheckFlip(velocityX); 
     }

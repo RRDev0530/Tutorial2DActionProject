@@ -7,6 +7,7 @@ public class Entity_Combat : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRidus;
     [SerializeField] private LayerMask whatisTarget;
+    [SerializeField] private float attackDamage;
 
     public void DoAttack()
     {
@@ -16,7 +17,7 @@ public class Entity_Combat : MonoBehaviour
         {
             Entity_Health targetHealth = Target.GetComponent<Entity_Health>();
         
-            targetHealth?.TakeDamage(10f, transform);
+            targetHealth?.TakeDamage(attackDamage, transform);
         }
                   
 

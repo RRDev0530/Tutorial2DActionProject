@@ -5,29 +5,31 @@ public class Entity_Health : MonoBehaviour
 {
 
     private Entity_VFX onDamageVFX;
-    private Rigidbody2D rb => GetComponent<Rigidbody2D>();
+    protected Entity entity;
 
     [Header("Knockback info")]
     [SerializeField]private float knockbackDuration = 0.3f;
-    [SerializeField]private Vector2 knockbackForce;
-    [SerializeField]private Vector2 heavy_knockbackForce;
-    [SerializeField]private float knockbackDamageThreshold = 20f;
-
-    private Coroutine knockbackCourintine;
+    [SerializeField]private Vector2 knockbackForce = new Vector2(3f,2f);
+    [SerializeField]private Vector2 knockbackForce_Heavy = new Vector2(6f, 3f);
+    [SerializeField]private float knockbackDamageThreshold = 0.2f;
 
     [SerializeField] private float MaxHP;
     private float currentHP;
     private bool isDead;
+    protected bool isDeadAnimFinished;
     private void Awake()
     {
         onDamageVFX = GetComponent<Entity_VFX>();
+        entity = GetComponent<Entity>();
+
+        currentHP = MaxHP;
     }
 
     public virtual void TakeDamage(float damage, Transform damageDealer)
     {         
         ReduceHealth(damage);
         onDamageVFX?.PlayHitVFX();
-        PlayKnockback();
+        entity.RecieveKnockback(CalculateKnockback(damage, damageDealer), knockbackDuration);
 
         if (currentHP <= 0)
         {
@@ -35,49 +37,36 @@ public class Entity_Health : MonoBehaviour
         }
     }
 
-    private IEnumerator OnKnockBackCo(float damage, Transform damageDealer)
-    {
-        rb.linearVelocity = CalculateKnockBackForce(damage,damageDealer);
+    
 
-        yield return new WaitForSeconds(knockbackDuration);
-        rb.linearVelocity = Vector2.zero;
+    private Vector2 CalculateKnockback(float damage, Transform damageDealer)
+    {
+
+        Vector2 knockback = damage / MaxHP <= knockbackDamageThreshold ? knockbackForce : knockbackForce_Heavy;
+        knockback.x *= damageDealer.position.x < transform.position.x ? 1 : -1;
+
+        return knockback;
 
     }
-
-    private Vector2 CalculateKnockBackForce(float damage, Transform damageDealer)
-    {
-        float direction = transform.position.x > damageDealer.position.x ? 1 : -1;
-        Vector2 knockbackF = damage / MaxHP >= knockbackDamageThreshold ? knockbackForce : heavy_knockbackForce;
-
-        return knockbackF * direction;
-
-    }
-
-    private void PlayKnockback()
-    {
-        if(knockbackCourintine != null)
-        {
-            StopCoroutine(knockbackCourintine);
-        }
-
-        StartCoroutine(OnKnockBackCo(currentHP, transform));
-    }
-
 
     private void ReduceHealth(float damage)
     {
         if(isDead) 
             return;
 
-        MaxHP -= damage;
-        Debug.Log(transform.name + " took " + damage + " damage. Remaining Health: " + MaxHP);
+        currentHP -= damage;
 
     }
 
-    private void Die()
+    public virtual void Die()
     {
         isDead = true;
-        Debug.Log(transform.name + " is dead.");
+        
+    }
+
+    public void DeadAnimFinished()
+    {
+       isDeadAnimFinished = true;
     }
 
 }

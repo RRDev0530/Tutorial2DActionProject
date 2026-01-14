@@ -13,4 +13,9 @@ public class Enemy_Health : Entity_Health
 
     }
 
+    public override void Die()
+    {
+        base.Die();
+        enemy.stateMachine.ChangeState(enemy.deadState);
+    }
 }

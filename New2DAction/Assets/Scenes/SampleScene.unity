@@ -289,6 +289,7 @@ MonoBehaviour:
   GroundCheckDistance: 1.8
   WallChecker: 0
   GroundCheckComponent: {fileID: 326136390}
+  isKnockback: 0
   movespeed: 10
   jumpForce: {x: 0, y: 12}
   wallJumpForce: {x: 10, y: 16}
@@ -315,6 +316,7 @@ MonoBehaviour:
   whatisTarget:
     serializedVersion: 2
     m_Bits: 256
+  attackDamage: 25
 --- !u!114 &326136395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,9 +330,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDuration: 0.3
-  knockbackForce: {x: 0, y: 0}
-  heavy_knockbackForce: {x: 0, y: 0}
-  knockbackDamageThreshold: 20
+  knockbackForce: {x: 3, y: 2}
+  knockbackForce_Heavy: {x: 10, y: 5}
+  knockbackDamageThreshold: 0.2
   MaxHP: 100
 --- !u!114 &326136396
 MonoBehaviour:
@@ -8180,6 +8182,7 @@ MonoBehaviour:
   GroundCheckDistance: 0.65
   WallChecker: 0
   GroundCheckComponent: {fileID: 1056804704}
+  isKnockback: 0
   movespeed: 2
   whatIsPlayer:
     serializedVersion: 2
@@ -8228,6 +8231,7 @@ MonoBehaviour:
   whatisTarget:
     serializedVersion: 2
     m_Bits: 128
+  attackDamage: 10
 --- !u!114 &941765889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8241,9 +8245,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackDuration: 0.3
-  knockbackForce: {x: 0, y: 0}
-  heavy_knockbackForce: {x: 0, y: 0}
-  knockbackDamageThreshold: 10
+  knockbackForce: {x: 3, y: 2}
+  knockbackForce_Heavy: {x: 6, y: 4}
+  knockbackDamageThreshold: 0.2
   MaxHP: 100
 --- !u!114 &941765890
 MonoBehaviour:
