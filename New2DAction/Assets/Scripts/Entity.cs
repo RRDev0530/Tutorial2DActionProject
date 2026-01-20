@@ -42,6 +42,11 @@ public class Entity : MonoBehaviour
 
     }
 
+    public virtual void EntityDeath()
+    {
+
+    }
+
     public void RecieveKnockback(Vector2 knockback, float duration)
     {
         if (KnockbackCo != null)
@@ -114,7 +119,12 @@ public class Entity : MonoBehaviour
     {
         isTouchingWall = Physics2D.Raycast(transform.position + new Vector3(0, capsuleCollider.size.y / 2), new Vector2(facingDir, 0), capsuleCollider.size.x / 2, whatIsGround);
     }
-    public void SetAnimationFinished()
+    public void SetAttackAnimationFinished()
+    {
+        stateMachine.currentState.SetAnimationFinished();
+    }
+
+    public void SetDeadAnimationFinished()
     {
         stateMachine.currentState.SetAnimationFinished();
     }

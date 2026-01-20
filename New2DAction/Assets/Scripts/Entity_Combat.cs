@@ -13,11 +13,11 @@ public class Entity_Combat : MonoBehaviour
     {
         GetDetectedColliders();
 
-        foreach(var Target in GetDetectedColliders())
+        foreach(var target in GetDetectedColliders())
         {
-            Entity_Health targetHealth = Target.GetComponent<Entity_Health>();
-        
-            targetHealth?.TakeDamage(attackDamage, transform);
+            IDamageable damageable = target.GetComponent<IDamageable>();
+            damageable?.TakeDamage(attackDamage, transform);
+
         }
                   
 

@@ -16,7 +16,7 @@ public class Entity_AnimationTrigger : MonoBehaviour
 
     private void AnimationEvent_AttackFinishedTrigger()
     {
-        entity.SetAnimationFinished();
+        entity.SetAttackAnimationFinished();
     }
 
     private void AnimationEvent_HitFrameTrigger()
@@ -26,7 +26,7 @@ public class Entity_AnimationTrigger : MonoBehaviour
 
     private void AnimationEvent_DeadFinishedTrigger()
     {
-        entityHealth.DeadAnimFinished();
+        entity.SetDeadAnimationFinished();
     }
 
 }

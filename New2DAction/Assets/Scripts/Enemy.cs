@@ -39,6 +39,16 @@ public class Enemy : Entity
         stateMachine.ChangeState(battleState);
     }
 
+    public override void EntityDeath()
+    {
+        base.EntityDeath();
+        stateMachine.ChangeState(deadState);
+    }
+
+    private void HandlePlayerDeath()
+    {
+        stateMachine.ChangeState(idleState);
+    }
     public RaycastHit2D PlayerDectection()
     {
         RaycastHit2D hit = Physics2D.Raycast(playerDetector.position, Vector2.right * facingDir, sightRange, whatIsPlayer | whatIsGround);
@@ -49,6 +59,16 @@ public class Enemy : Entity
         player = hit.transform;
         return hit; 
 
+    }
+
+    private void OnEnable()
+    {
+        Player.onPlayerDeath += HandlePlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        Player.onPlayerDeath -= HandlePlayerDeath;
     }
 
     protected override void OnDrawGizmos()

@@ -9,21 +9,22 @@ public class Enemy_DeadState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        
+
+        stateMachine.SwitchOffStateMachine();
+
     }
 
     public override void Update()
     {
         base.Update();
 
-    }
-    public override void Exit() 
-    {
-        base.Exit();
+        if (triggerCalled)
+        {
+            anim.enabled = false;
 
-        anim.enabled = false;
-
-        GameObject.Destroy(enemy.gameObject);
+            GameObject.Destroy(enemy.gameObject);
+        }
+        
     }
 
 

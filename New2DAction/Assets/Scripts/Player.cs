@@ -1,11 +1,11 @@
+using System;
 using System.Collections;
-using Unity.VisualScripting;
+using System.Xml;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XInput;
 
 public class Player : Entity
 {
+    public static event Action onPlayerDeath;
     public PlayerInputSet inputSet { get; private set; }
 
     public Player_IdleState idleState { get; private set; }
@@ -16,6 +16,7 @@ public class Player : Entity
     public Player_WallJump wallJumpState { get; private set; }
     public Player_DashState dashState { get; private set; }
     public Player_BasicAttackState basicAttackState { get; private set; }
+    public Player_DeadState deadState { get; private set; }
 
     private Coroutine queuedAttackCo;
 
@@ -47,6 +48,7 @@ public class Player : Entity
         wallJumpState = new Player_WallJump(this, stateMachine, "jumpfall");
         dashState = new Player_DashState(this, stateMachine, "dash");
         basicAttackState = new Player_BasicAttackState(this, stateMachine, "basicattack");
+        deadState = new Player_DeadState(this, stateMachine, "dead");
     }
 
     protected override void Start()
@@ -67,6 +69,13 @@ public class Player : Entity
     {
         inputSet.Disable();
 
+    }
+
+    public override void EntityDeath()
+    {
+        base.EntityDeath();
+        onPlayerDeath?.Invoke();
+        stateMachine.ChangeState(deadState);
     }
 
     public void EnterAttackStateWithDelay()
